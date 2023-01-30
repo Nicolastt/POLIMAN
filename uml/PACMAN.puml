@@ -1,0 +1,130 @@
+@startuml
+class Poliman{
+    -anchura: int
+    -largo: int
+    -x:int
+    -y:int
+    -contador:int
+    -puntosComidos:int
+    -obtienePoder:boolean
+    -direcciónPersonaje:String
+    +Poliman(int,int)
+    +getX():int
+    +getY():int
+    +setX():int
+    +setY():int
+    +existeUnaPared():boolean
+    +rehacer()
+    +incrementarPuntosComidos():int
+    +obtuvoPoder():boolean
+    +darPoder()
+    +resetearPower()
+    +mover()
+    +pintarPersonaje():Gráficos
+}
+
+class Fantasmita{
+    -anchura:int
+    -largo:int
+    -comportamiento:String
+    -direcciónPersonaje:String
+    +Fantasmita(int,int)
+    +getX():int
+    +getY():int
+    +setX():int
+    +setY():int
+    +setDirección():String
+    +getDirección():String
+    +moverDependiendoComportamiento()
+    +existeUnaPared():boolean
+    +seChococonPoliman():boolean
+    +rehacer()
+    +huyeDePacman()
+    +pintarPersonaje():Gráficos
+}
+
+class MainBoard{
+    -imagenTitulo:Imagen
+    -imagenFinalDeJuego:Imagen
+    -imagenGanaste:Imagen
+    -poliman:Poliman
+    -fantasmitas:Fantasmita[]
+    -puntaje:int
+    -numVidas:int
+    -posiciónBloquesLaberinto:int
+    -perdió:boolean
+    -gano:boolean
+    -iniciadorJuego:int
+    -tiempo: double
+    -fuentes:Fuente[]
+    +MainBoard()
+    +rehacer()
+    +reposicionamientoPersonaje()
+    +seChoco():boolean
+    +polimanPuedeComerFantamitas()
+    +comerFantasmitas()
+    +perderVidas()
+    +getVidas():int
+    +comerPuntos()
+    +incrementarPuntos():int
+    +getPuntaje():int
+    +pintarComponentes():Gráficos
+}
+
+class BloqueLaberinto{
+    -ancho:int
+    -largo:int
+    -x:int
+    -y:int
+    +BloqueLaberinto(int,int)
+    +pintarBloque():Gráficos
+}
+class PuntoLaberinto{
+    -ancho:int
+    -altura:int
+    -x:int
+    -y:int
+    +Pellet(int,int)
+   +pintarPuntoLaberinto():Gráficos
+}
+class Poder{
+    +poder(int,int)
+    +pintarPoder():Gráficos
+}
+
+class EventoDeMovimiento{
+    -MainBoard: MainBoard
+    -fraccionTiempo: Tiempo
+    +comenzar()
+    +realizoAcciones(boolean)
+    +keyPress(KeyEvent)
+    +keyReleased((KeyEvent)
+    +keyTyped(KeyEvent)
+}
+
+
+interface Personaje{
+    -subida:int
+    -bajar:int
+    -derecha: int
+    -izquierda:int
+    +getX():int
+    +getY():int
+    +existeUnaPared():boolean
+    +mover()
+    +rehacer()
+    +pintarPersonaje():Gráficos
+}
+
+
+Poliman -> Fantasmita
+Poliman ->MainBoard
+Poliman .|> Personaje
+Fantasmita --.>MainBoard
+Fantasmita -.|> Personaje
+MainBoard -->BloqueLaberinto
+MainBoard ->PuntoLaberinto
+Poder --|> PuntoLaberinto
+MainBoard -.> EventoDeMovimiento
+
+@enduml

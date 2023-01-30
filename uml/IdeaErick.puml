@@ -1,0 +1,192 @@
+@startuml
+class PacMan {
+    - posiciónXPacMan: int
+    - posiciónYPacMan: int
+    - vidas: int
+    + moverArriba()
+    + moverAbajo()
+    + moverIzquierda()
+    + moverDerecha()
+    + morir()
+    + comer()
+}
+
+abstract class Fantasma {
+    - forma
+    - tamaño
+    - pelaje
+    - colisionarObjeto
+    - posiciónXFantasma: int
+    - posiciónYFantasma: int
+    - modo
+    + buscar(dirección)
+    + mover(abordar)
+    + colisionar(colisionarObjeto)
+    + modoAsustado()
+    + recogerPunto()
+    # setColor
+    # comportamientoDePersecución : ComportamientoDePersecución
+    # comportamientoDeDispersión: ComportamientoDeDispersión
+    # comportamientoAsustado: ComportamientoAsustado
+}
+
+class PerroRojo{
+    - pelaje = red
+    + abordar(modo)
+    + comportamientoDePersecusión: PersecuciónAgresiva.perseguir()
+    + comportamientoDeDispersión: DispersiónEsquinaSuperiorDerecha.dispersar()
+}
+
+class PerroRosa{
+    - pelaje = pink
+    + abordar(modo)
+    + comportamientoDePersecución: PersecuciónDeEmboscada.perseguir()
+    + comportamientoDeDispersión: DispersiónEsquinaSuperiorIzquierda.dispersar()
+}
+
+class PerroCian{
+    - pelaje = cian
+    + abordar(modo)
+    + comportamientoDePersecución: PersecuciónDePatrulla.perseguir()
+    + comportamientoDeDispersión: DispersiónEsquinaInferiorDerecha.dispersar()
+}
+
+class PerroNaranja{
+    - pelaje = naranja
+    + abordar(modo)
+    + comportamientoDePersecución: PersecuciónRandom.perseguir()
+    + comportamientoDeDispersión: DispersiónEsquinaInferiorIzquierda.dispersar()
+}
+
+
+class Tablero{
+    - tamaño: Tamaño
+    - celdas: Celda[]
+    + dibujarTablero()
+    + actualizarTablero()
+}
+
+class Celda{
+    - posición: Posición
+    - contenido: Contenido
+    + dibujarCelda()
+    + actualizarCelda()
+}
+
+class Posición{
+    - fila: int
+    - columna: int
+}
+
+class Contenido{
+    - tipo: TipoContenido
+}
+
+class Juego {
+    +iniciarJuego()
+    +reiniciarJuego()
+    +pausarJuego();
+}
+
+class Menú{
+    - tablero: Tablero
+    - pacman: PacMan
+    - fantasmas: Fantasma[]
+    - score: int
+    + comenzarJuego()
+    + visualizarScore()
+    + elegirDificultad()
+}
+
+class GUI {
+    + mostrarPantallaDeInicio()
+    + mostrarPantallaDeJuego()
+    + mostrarPantallaFinal()
+}
+
+
+interface ComportamientoDePersecución{
+    + perseguir(): void
+}
+
+class PersecuciónAgresiva{
+    + perseguir(): void
+}
+
+class PersecuciónRandom{
+    + perseguir(): void
+}
+
+class PersecuciónDePatrulla{
+    + perseguir(): void
+}
+
+class PersecuciónDeEmboscada{
+    + perseguir(): void
+}
+
+
+
+interface ComportamientoDeDispersión{
+    + dispersar(): void
+}
+
+class DispersiónEsquinaInferiorIzquierda{
+    + dispersar(): void
+}
+
+class DispersiónEsquinaInferiorDerecha{
+    + dispersar(): void
+}
+
+class DispersiónEsquinaSuperiorIzquierda{
+    + dispersar(): void
+}
+
+class DispersiónEsquinaSuperiorDerecha{
+    + dispersar(): void
+}
+
+interface ComportamientoAsustado{
+    + asustado(): void
+}
+
+class AsustadoVagando{
+    + asustado(): void
+}
+
+
+Juego --> Menú
+Menú --> Tablero
+PacMan ----.> Menú
+Fantasma -----.>Menú
+PacMan -> GUI : render()
+Juego -> GUI : render()
+Fantasma --> GUI: render()
+Juego ---> PacMan
+Juego --> Fantasma
+Juego --> Tablero
+Tablero --> Celda
+Celda --> Contenido
+Celda --> Posición
+
+Fantasma --> ComportamientoDeDispersión
+ComportamientoDeDispersión <|.. DispersiónEsquinaInferiorDerecha
+ComportamientoDeDispersión <|.. DispersiónEsquinaSuperiorDerecha
+ComportamientoDeDispersión <|.. DispersiónEsquinaInferiorIzquierda
+ComportamientoDeDispersión <|.. DispersiónEsquinaSuperiorIzquierda
+
+Fantasma --> ComportamientoAsustado
+ComportamientoAsustado <|.. AsustadoVagando
+
+Fantasma --> ComportamientoDePersecución
+ComportamientoDePersecución <|.. PersecuciónAgresiva
+ComportamientoDePersecución <|.. PersecuciónDeEmboscada
+ComportamientoDePersecución <|.. PersecuciónDePatrulla
+ComportamientoDePersecución <|.. PersecuciónRandom
+
+Fantasma <|-- PerroRojo
+Fantasma <|-- PerroRosa
+Fantasma <|-- PerroCian
+Fantasma <|-- PerroNaranja
+@enduml
